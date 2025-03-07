@@ -31,7 +31,6 @@ export default function Dashboard() {
         setBookClub(club)
 
         const { library } = await apiRequest("/library") as { library: UserLibrary[] }
-        console.log("BOOKS: ", library)
         setLibrary(library)
       } catch (err) {
         console.error(err)
