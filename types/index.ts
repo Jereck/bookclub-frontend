@@ -7,7 +7,6 @@ export interface Book {
   createdAt: string; // Added to match Prisma
 }
 
-
 export interface UserLibrary {
   id: string;
   title: string;
@@ -15,16 +14,21 @@ export interface UserLibrary {
   coverImage?: string;
   rating?: number;
   userId: string;
-  createdAt: string; // Added to match Prisma
+  createdAt: string;
   book: Book;
 }
-
 
 export interface User {
   id: string;
   name: string;
   email: string;
   createdAt: string;
+  readingGoal: number;
+  readingGoalProgress: number;
+  readingStreak: number;
+  lastReadDate?: string;
+  currentlyReading?: Book;
+  currentPage?: number;
 }
 
 export interface Membership {
