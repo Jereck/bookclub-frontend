@@ -1,7 +1,9 @@
+import { useRouter } from "next/navigation";
 import { BookOpen } from "lucide-react";
 import { Button } from "./ui/button";
 
-export function EmptyLibrary({ router }: { router: any }) {
+export function EmptyLibrary() {
+  const router = useRouter()
   return (
     <div className="text-center py-6">
       <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-3" />

@@ -74,8 +74,8 @@ export default function Dashboard() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
-          <BookClubOverviewCard bookClub={bookClub} router={router} />
-          <RecentBooksCard library={library} router={router} />
+          <BookClubOverviewCard bookClub={bookClub} />
+          <RecentBooksCard library={library} />
         </TabsContent>
 
         <TabsContent value="library" className="space-y-4">
@@ -103,7 +103,7 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <EmptyLibrary router={router} />
+                <EmptyLibrary />
               )}
             </CardContent>
           </Card>
@@ -135,7 +135,7 @@ export default function Dashboard() {
                   </div>
                 </div>
               ) : (
-                <EmptyBookClub router={router} />
+                <EmptyBookClub />
               )}
             </CardContent>
           </Card>

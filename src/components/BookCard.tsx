@@ -1,8 +1,9 @@
 import Image from "next/image";
 import { UserLibrary } from "../../types";
-import { Badge, BookOpen, Star } from "lucide-react";
+import { BookOpen, Star } from "lucide-react";
 
 export function BookCard({ entry, compact = false }: { entry: UserLibrary; compact?: boolean }) {
+  console.log("Book card: ", entry);
   return (
     <div
       className={`group relative overflow-hidden rounded-lg border bg-background transition-all hover:shadow-md ${compact ? "" : "h-full"}`}
@@ -34,7 +35,7 @@ export function BookCard({ entry, compact = false }: { entry: UserLibrary; compa
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    className={`${compact ? "h-3 w-3" : "h-4 w-4"} ${i < entry.rating ? "text-yellow-500 fill-yellow-500" : "text-muted"}`}
+                    className={`${compact ? "h-3 w-3" : "h-4 w-4"} ${i < (entry.rating as number) ? "text-yellow-500 fill-yellow-500" : "text-muted"}`}
                   />
                 ))}
               </div>

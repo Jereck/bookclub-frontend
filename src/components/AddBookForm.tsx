@@ -56,6 +56,7 @@ export default function AddBookForm({ onSubmit }: { onSubmit: (book: Book) => vo
         setBooks([])
       }
     } catch (err) {
+      console.error(err)
       setError("Book not found. Please enter details manually.")
       setBooks([])
     } finally {

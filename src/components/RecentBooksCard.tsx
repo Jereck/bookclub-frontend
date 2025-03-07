@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { BookMarked } from "lucide-react";
 import { UserLibrary } from "../../types";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -5,7 +6,8 @@ import { Button } from "./ui/button";
 import { BookCard } from "./BookCard";
 import { EmptyLibrary } from "./EmptyLibrary";
 
-export function RecentBooksCard({ library, router }: { library: UserLibrary[]; router: any }) {
+export function RecentBooksCard({ library }: { library: UserLibrary[] }) {
+  const router = useRouter()
   const recentBooks = library.slice(0, 3)
 
   return (
@@ -29,7 +31,7 @@ export function RecentBooksCard({ library, router }: { library: UserLibrary[]; r
             ))}
           </div>
         ) : (
-          <EmptyLibrary router={router} />
+          <EmptyLibrary />
         )}
       </CardContent>
     </Card>

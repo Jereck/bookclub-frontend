@@ -1,3 +1,10 @@
+interface OpenLibraryDoc {
+  title: string;
+  author_name?: string[];
+  isbn?: string[];
+  cover_edition_key?: string;
+}
+
 export async function fetchBook(searchQuery: string, searchBy: "isbn" | "title") {
   let url = "";
 
@@ -27,11 +34,11 @@ export async function fetchBook(searchQuery: string, searchBy: "isbn" | "title")
   } else {
     if (!data.docs || data.docs.length === 0) throw new Error("No books found.");
 
-    return data.docs.map((book: any) => ({
+    return data.docs.map((book: OpenLibraryDoc) => ({
       title: book.title,
       author: book.author_name?.[0] || "Unknown Author",
       isbn: book.isbn?.[0] || null,
-      coverImage: `https://covers.openlibrary.org/b/olid/${book.cover_edition_key}-L.jpg` || null,
+      coverImage: book.cover_edition_key ? `https://covers.openlibrary.org/b/olid/${book.cover_edition_key}-L.jpg` : null,
     }));
   }
 }

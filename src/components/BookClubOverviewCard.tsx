@@ -1,9 +1,11 @@
+import { useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { BookClub } from "../../types";
 
-export function BookClubOverviewCard({ bookClub, router }: { bookClub: BookClub | null; router: any }) {
+export function BookClubOverviewCard({ bookClub }: { bookClub: BookClub | null }) {
+  const router = useRouter();
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-primary/5 border-b">

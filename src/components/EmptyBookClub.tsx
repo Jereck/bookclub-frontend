@@ -1,7 +1,9 @@
+import { useRouter } from "next/navigation";
 import { Users } from "lucide-react";
 import { Button } from "./ui/button";
 
-export function EmptyBookClub({ router }: { router: any }) {
+export function EmptyBookClub() {
+  const router = useRouter()
   return (
     <div className="text-center py-6">
       <Users className="h-12 w-12 text-muted-foreground mx-auto mb-3" />

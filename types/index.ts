@@ -10,9 +10,11 @@ export interface Book {
 
 export interface UserLibrary {
   id: string;
-  userId: string;
-  bookId: string;
+  title: string;
+  author: string;
+  coverImage?: string;
   rating?: number;
+  userId: string;
   createdAt: string; // Added to match Prisma
   book: Book;
 }
