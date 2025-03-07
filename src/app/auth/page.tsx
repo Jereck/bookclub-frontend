@@ -19,7 +19,7 @@ export default function Auth() {
       const data = await apiRequest(endpoint, {
         method: "POST",
         body: JSON.stringify(form),
-      });
+      }) as { token: string };
 
       localStorage.setItem("token", data.token);
       router.push("/dashboard");
