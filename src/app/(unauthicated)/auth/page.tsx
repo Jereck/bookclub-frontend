@@ -21,6 +21,8 @@ export default function Auth() {
         body: JSON.stringify(form),
       }) as { token: string };
 
+      console.log("Auth data ", data); 
+
       localStorage.setItem("token", data.token);
       router.push("/dashboard");
     } catch (err: unknown) {

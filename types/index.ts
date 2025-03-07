@@ -47,3 +47,22 @@ export interface BookClub {
   members?: Membership[]; // Updated to hold full user details
 }
 
+export interface BookData {
+  title: string; // Book title
+  author: string; // Primary author
+  isbn?: string | null; // ISBN if available
+  bookKey: string; // OpenLibrary work key (fallback unique ID)
+  coverImage?: string | null; // Cover image URL
+  firstPublishYear?: number | null; // First published year
+  language?: string[]; // Available languages
+}
+
+export interface OpenLibraryDoc {
+  title: string;
+  author_name?: string[];
+  ia?: string[];
+  cover_edition_key?: string;
+  key: string;
+  first_publish_year?: number;
+  language?: string[];
+}

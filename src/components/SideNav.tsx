@@ -7,6 +7,7 @@ import { Input } from './ui/input'
 import { ScrollArea } from './ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { User, UserLibrary } from '../../types'
+import BookSearchModal from './BookSearchModal'
 
 interface SideNavProps {
   library: UserLibrary[];
@@ -16,6 +17,12 @@ interface SideNavProps {
 const SideNav = ({ library, user }: SideNavProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const [libraryBooks, setLibraryBooks] = useState(library);
+
+  const logout = () => {
+    localStorage.removeItem("token"); // Remove token from storage
+    window.location.href = "/"; // Redirect to landing page
+  }
 
   const renderRating = (rating?: number) => {
     if (!rating) return null
@@ -27,6 +34,11 @@ const SideNav = ({ library, user }: SideNavProps) => {
         ))}
       </div>
     )
+  }
+
+  function refreshLibrary() {
+    // Ideally, fetch updated library from API
+    setLibraryBooks([...libraryBooks]); // Force re-render for now
   }
 
   return (
@@ -73,6 +85,9 @@ const SideNav = ({ library, user }: SideNavProps) => {
                 <Calendar className="mr-2 h-4 w-4" />
                 Events
               </Button>
+              <Button onClick={logout} variant="ghost" className="w-full justify-start">
+                Log out
+              </Button>
             </nav>
           </div>
 
@@ -86,6 +101,7 @@ const SideNav = ({ library, user }: SideNavProps) => {
                 My Library
               </h2>
               <p className="text-xs text-muted-foreground mt-1">{library.length} books in your collection</p>
+              <BookSearchModal onBookAdded={refreshLibrary} />
             </div>
 
             <div className="p-3">
