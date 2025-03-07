@@ -30,8 +30,9 @@ export default function Dashboard() {
         const club = await apiRequest("/bookclub/my-club") as BookClub
         setBookClub(club)
 
-        const books: UserLibrary[] = await apiRequest("/library/my-library")
-        setLibrary(books)
+        const { library } = await apiRequest("/library") as { library: UserLibrary[] }
+        console.log("BOOKS: ", library)
+        setLibrary(library)
       } catch (err) {
         console.error(err)
       } finally {
@@ -99,7 +100,7 @@ export default function Dashboard() {
               {library.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {library.map((entry) => (
-                    <BookCard key={entry.book.id} entry={entry} />
+                    <BookCard key={entry.id} entry={entry} />
                   ))}
                 </div>
               ) : (

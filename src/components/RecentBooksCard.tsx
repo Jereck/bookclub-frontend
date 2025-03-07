@@ -25,7 +25,7 @@ export function RecentBooksCard({ library, router }: { library: UserLibrary[]; r
         {recentBooks.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {recentBooks.map((entry) => (
-              <BookCard key={entry.book.id} entry={entry} compact />
+              <BookCard key={entry.id} entry={entry} compact />
             ))}
           </div>
         ) : (

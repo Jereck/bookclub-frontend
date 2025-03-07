@@ -9,10 +9,10 @@ export function BookCard({ entry, compact = false }: { entry: UserLibrary; compa
     >
       <div className="flex flex-col h-full">
         <div className={`flex ${compact ? "flex-row gap-3 p-3" : "flex-col p-4"}`}>
-          {entry.book.coverImage ? (
+          {entry.coverImage ? (
             <Image
-              src={entry.book.coverImage || "/placeholder.svg"}
-              alt={entry.book.title}
+              src={entry.coverImage || "/placeholder.svg"}
+              alt={entry.title}
               width={compact ? 60 : 120}
               height={compact ? 90 : 180}
               className={`${compact ? "h-[90px] w-[60px]" : "w-full h-[180px] object-contain mb-3"} rounded-md shadow-sm`}
@@ -26,8 +26,8 @@ export function BookCard({ entry, compact = false }: { entry: UserLibrary; compa
           )}
 
           <div className={`${compact ? "" : "mt-2"} flex-1`}>
-            <h3 className={`font-semibold line-clamp-1 ${compact ? "text-sm" : "text-base"}`}>{entry.book.title}</h3>
-            <p className={`text-muted-foreground ${compact ? "text-xs" : "text-sm"}`}>by {entry.book.author}</p>
+            <h3 className={`font-semibold line-clamp-1 ${compact ? "text-sm" : "text-base"}`}>{entry.title}</h3>
+            <p className={`text-muted-foreground ${compact ? "text-xs" : "text-sm"}`}>by {entry.author}</p>
 
             {entry.rating && (
               <div className="flex items-center mt-1">
@@ -38,12 +38,6 @@ export function BookCard({ entry, compact = false }: { entry: UserLibrary; compa
                   />
                 ))}
               </div>
-            )}
-
-            {!compact && entry.status && (
-              <Badge variant="outline" className="mt-2">
-                {entry.status}
-              </Badge>
             )}
           </div>
         </div>
