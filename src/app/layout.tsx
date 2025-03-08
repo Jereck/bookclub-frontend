@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import "./globals.css";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -19,8 +19,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`antialiased`}
+        suppressHydrationWarning
       >
-        {children}
+        <Suspense>
+          {children}
+        </Suspense>
       </body>
     </html>
   );
