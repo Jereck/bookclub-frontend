@@ -2,20 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/utils/api";
-import { useAuthGuard } from "@/utils/auth";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import SideNav from "@/components/SideNav";
 import { BookClub, User, UserLibrary } from "../../../../types";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import SideNav from "@/components/SideNav";
 
 export default function BookClubDashboard() {
-  useAuthGuard();
   const [user, setUser] = useState<User>();
   const [bookClub, setBookClub] = useState<BookClub | null>(null);
   const [library, setLibrary] = useState<UserLibrary[] | []>([]);
   const [loading, setLoading] = useState(true);  
+  const [clubName, setClubName] = useState(""); // State for book club name
+  const [creatingClub, setCreatingClub] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,11 +46,35 @@ export default function BookClubDashboard() {
     fetchData();
   }, []);
 
+  async function createBookClub() {
+    if (!clubName.trim()) {
+      alert("Please enter a book club name.");
+      return;
+    }
+
+    setCreatingClub(true);
+    try {
+      const response = await apiRequest("/bookclub/create", {
+        method: "POST",
+        body: JSON.stringify({ name: clubName }),
+      }) as BookClub;
+
+      alert("Book club created!");
+      setBookClub(response);
+      setClubName("");
+    } catch (err) {
+      console.error("Error creating book club:", err);
+      alert("Failed to create book club.");
+    } finally {
+      setCreatingClub(false);
+    }
+  }
+
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className="flex h-screen bg-background">
-      <SideNav library={library} user={user} />
+      <SideNav user={user} library={library} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <main className="flex-1 overflow-auto p-4 md:p-6">
           <div className="grid gap-6">
@@ -127,7 +153,23 @@ export default function BookClubDashboard() {
                 <div className="flex flex-col">
                   <p className="text-muted-foreground">You are not in a book club yet.</p>
                   <div className="flex gap-4 mt-4">
-                    <Button>Create Book Club</Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button>Create Book Club</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogTitle className="text-lg font-semibold">Create a Book Club</DialogTitle>
+                        <Input
+                          placeholder="Enter book club name"
+                          value={clubName}
+                          onChange={(e) => setClubName(e.target.value)}
+                        />
+                        <Button onClick={createBookClub} disabled={creatingClub}>
+                          {creatingClub ? "Creating..." : "Create"}
+                        </Button>
+                      </DialogContent>
+                    </Dialog>
+
                     <Button>Join Book Club</Button>
                   </div>
                 </div>

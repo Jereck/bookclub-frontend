@@ -1,4 +1,3 @@
-"use client";
 import { useState } from "react";
 import { fetchBook } from "@/utils/fetchBook";
 import { apiRequest } from "@/utils/api";
@@ -7,17 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
+import { Book } from "../../types";
 
-interface Book {
-  title: string;
-  author: string;
-  isbn: string | null;
-  bookKey: string | null;
-  coverImage?: string | null;
-  firstPublished?: string | null;
-}
-
-export default function BookSearchModal({ onBookAdded }: { onBookAdded: () => void }) {
+export default function BookSearchModal() {
   const [searchQuery, setSearchQuery] = useState("");
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
@@ -28,8 +19,7 @@ export default function BookSearchModal({ onBookAdded }: { onBookAdded: () => vo
     setError("");
 
     try {
-      const results = await fetchBook(searchQuery, "title");
-      console.log("Search results: ", results)
+      const results = await fetchBook(searchQuery, "title") as Book[];
       setBooks(results);
     } catch (err) {
       console.error("Error searching for book:", err);
@@ -43,17 +33,20 @@ export default function BookSearchModal({ onBookAdded }: { onBookAdded: () => vo
     try {
       await apiRequest("/library/add", {
         method: "POST",
-        body: JSON.stringify({
+        body: JSON.stringify({ 
           title: book.title,
           author: book.author,
-          isbn: book.isbn !== "Unknown ISBN" ? book.isbn : null,
-          bookKey: book.bookKey || null,
+          isbn: book.isbn,
+          isbn13: book.isbn13,
           coverImage: book.coverImage,
-          firstPublished: book.firstPublished || null,
+          publisher: book.publisher,
+          language: book.language,
+          datePublished: book.datePublished,
+          pages: book.pages,
         }),
       });
-      alert(`${book.title} added to your library!`);
-      onBookAdded(); // Refresh library list
+
+      alert("Book added to your library!");
     } catch (err) {
       console.error("Error adding book:", err);
       alert("Failed to add book.");
@@ -85,12 +78,8 @@ export default function BookSearchModal({ onBookAdded }: { onBookAdded: () => vo
 
         <ScrollArea className="mt-4 max-h-64">
           {books.map((book) => (
-            <div key={book.isbn || book.title} className="flex gap-4 items-center border-b pb-2 mb-2">
-              {book.coverImage ? (
-                <Image src={book.coverImage} alt={book.title} width={50} height={75} className="rounded" />
-              ) : (
-                <div className="w-[50px] h-[75px] bg-gray-200 flex items-center justify-center">📖</div>
-              )}
+            <div key={book.isbn} className="flex gap-4 items-center border-b pb-2 mb-2">
+              <Image src={book.coverImage || "/placeholder.svg"} alt={book.title} width={50} height={75} className="rounded" />
               <div className="flex-1">
                 <h3 className="text-sm font-medium">{book.title}</h3>
                 <p className="text-xs text-muted-foreground">{book.author}</p>

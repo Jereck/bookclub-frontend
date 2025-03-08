@@ -1,8 +1,9 @@
+import { useAuthStore } from "@/stores/authStore";
 const API_BASE_URL = "http://localhost:5000/api";
 
 export async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-
+  const token = useAuthStore.getState().token;
+  
   const headers = {
     "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),

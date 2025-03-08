@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Button } from './ui/button'
 import { BarChart, BookMarked, BookOpen, Calendar, Menu, Search, Star, Users } from 'lucide-react'
@@ -8,19 +8,26 @@ import { ScrollArea } from './ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { User, UserLibrary } from '../../types'
 import BookSearchModal from './BookSearchModal'
+import { useAuthStore } from '@/stores/authStore'
+import { useRouter } from 'next/navigation'
 
 interface SideNavProps {
   library: UserLibrary[];
   user?: User;
 }
 
-const SideNav = ({ library, user }: SideNavProps) => {
+const SideNav = ({ user }: SideNavProps) => {
+  const { logout, library, fetchUserData } = useAuthStore()
+  const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
-  const [libraryBooks, setLibraryBooks] = useState(library);
 
-  const logout = () => {
-    localStorage.removeItem("token"); // Remove token from storage
+  useEffect(() => {
+    fetchUserData()
+  }, [fetchUserData])
+
+  const logoutUser = () => {
+    logout()
     window.location.href = "/"; // Redirect to landing page
   }
 
@@ -34,11 +41,6 @@ const SideNav = ({ library, user }: SideNavProps) => {
         ))}
       </div>
     )
-  }
-
-  function refreshLibrary() {
-    // Ideally, fetch updated library from API
-    setLibraryBooks([...libraryBooks]); // Force re-render for now
   }
 
   return (
@@ -69,7 +71,7 @@ const SideNav = ({ library, user }: SideNavProps) => {
                 <BookOpen className="mr-2 h-4 w-4" />
                 Dashboard
               </Button>
-              <Button variant="ghost" className="w-full justify-start">
+              <Button variant="ghost" className="w-full justify-start" onClick={() => router.push('/library')}>
                 <BookMarked className="mr-2 h-4 w-4" />
                 My Library
               </Button>
@@ -85,7 +87,7 @@ const SideNav = ({ library, user }: SideNavProps) => {
                 <Calendar className="mr-2 h-4 w-4" />
                 Events
               </Button>
-              <Button onClick={logout} variant="ghost" className="w-full justify-start">
+              <Button onClick={logoutUser} variant="ghost" className="w-full justify-start">
                 Log out
               </Button>
             </nav>
@@ -101,7 +103,7 @@ const SideNav = ({ library, user }: SideNavProps) => {
                 My Library
               </h2>
               <p className="text-xs text-muted-foreground mt-1">{library.length} books in your collection</p>
-              <BookSearchModal onBookAdded={refreshLibrary} />
+              <BookSearchModal />
             </div>
 
             <div className="p-3">
@@ -125,11 +127,11 @@ const SideNav = ({ library, user }: SideNavProps) => {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {library.map((book) => (
-                      <div key={book.id} className="flex gap-3 group">
+                    {library.map((libraryBook) => (
+                      <div key={libraryBook.id} className="flex gap-3 group">
                         <div className="relative w-10 h-14 flex-shrink-0 bg-muted rounded overflow-hidden">
-                          {book.coverImage ? (
-                            <Image src={book.coverImage || "/placeholder.svg"} alt="" fill className="object-cover" />
+                          {libraryBook.book.coverImage ? (
+                            <Image src={libraryBook.book.coverImage || "/placeholder.svg"} alt="" fill className="object-cover" />
                           ) : (
                             <div className="absolute inset-0 flex items-center justify-center">
                               <BookOpen className="w-4 h-4 text-muted-foreground" />
@@ -137,13 +139,13 @@ const SideNav = ({ library, user }: SideNavProps) => {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="text-sm font-medium line-clamp-1" title={book.title}>
-                            {book.title}
+                          <h3 className="text-sm font-medium line-clamp-1" title={libraryBook.book.title}>
+                            {libraryBook.book.title}
                           </h3>
-                          <p className="text-xs text-muted-foreground line-clamp-1" title={book.author}>
-                            {book.author}
+                          <p className="text-xs text-muted-foreground line-clamp-1" title={libraryBook.book.author}>
+                            {libraryBook.book.author}
                           </p>
-                          <div className="mt-1">{renderRating(book.rating)}</div>
+                          <div className="mt-1">{renderRating(libraryBook.rating)}</div>
                         </div>
                       </div>
                     ))}

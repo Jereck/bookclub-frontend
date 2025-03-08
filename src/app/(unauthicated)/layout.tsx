@@ -1,16 +1,17 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function UnauthenticatedLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { token } = useAuthStore();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (token) {
-      router.replace("/dashboard"); // Redirect logged-in users away
+      router.push("/dashboard");
     }
-  }, [router]);
+  }, [token, router]);
 
   return <>{children}</>;
 }

@@ -1,22 +1,28 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { token } = useAuthStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
+    if (typeof window === "undefined") return
+    
     if (!token) {
-      router.replace("/"); // Redirect unauthenticated users to landing page
+      router.push("/");
     } else {
       setLoading(false);
     }
-  }, [router]);
+  }, [token, router]);
 
   if (loading) return <div>Loading...</div>;
 
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+    </>
+  );
 }
