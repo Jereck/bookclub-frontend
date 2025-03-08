@@ -1,9 +1,9 @@
 import React from "react";
-import { UserLibrary } from "../../../../../types";
+import { UserLibrary } from "../../types";
 import Image from "next/image";
 
 
-const BookDetails = ({ userLibrary }: { userLibrary: UserLibrary }) => {
+const BookDetails = ({ userLibrary }: { userLibrary: UserLibrary}) => {
   return (
     <div className="p-4">
       <div className="flex gap-6">
@@ -35,7 +35,7 @@ const BookDetails = ({ userLibrary }: { userLibrary: UserLibrary }) => {
           <span className="font-semibold">Your Rating:</span> {userLibrary.rating || "Not rated"}
         </p>
         <p className="text-sm text-muted-foreground">
-          <span className="font-semibold">Added on:</span> {new Date(userLibrary.addedAt).toDateString()}
+          <span className="font-semibold">Added on:</span> {new Date(userLibrary.createdAt).toDateString()}
         </p>
       </div>
     </div>

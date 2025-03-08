@@ -6,7 +6,9 @@ export interface User {
   readingGoal: number;
   readingGoalProgress: number;
   readingStreak: number;
-  currentlyReading?: Book | null;
+  lastReadDate?: string | null;
+  currentlyReading?: UserLibrary | null; // ✅ Fix: Matches Prisma, as it stores UserLibrary, not Book
+  currentPage?: number;
 }
 
 export interface AuthState {
@@ -17,6 +19,7 @@ export interface AuthState {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   fetchUserData: () => Promise<void>;
+  checkAuth: () => void;
 }
 
 export interface Book {
@@ -37,7 +40,7 @@ export interface UserLibrary {
   id: string;
   book: Book;
   rating?: number;
-  addedAt: string;
+  createdAt: string;
 }
 
 export interface UserProfile {
@@ -50,4 +53,19 @@ export interface UserProfile {
   lastReadDate?: string | null;
   currentlyReading?: Book | null;
   currentPage?: number;
+}
+
+export interface BookClub {
+  id: string;
+  name: string;
+  creatorId: string;
+  members: Membership[];
+  createdAt: string;
+}
+
+export interface Membership {
+  id: string;
+  userId: string;
+  bookClubId: string;
+  joinedAt: string;
 }

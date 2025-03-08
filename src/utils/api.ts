@@ -3,6 +3,8 @@ const API_BASE_URL = "http://localhost:5000/api";
 
 export async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = useAuthStore.getState().token;
+
+  console.log("Token: ", token);
   
   const headers = {
     "Content-Type": "application/json",

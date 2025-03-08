@@ -51,8 +51,8 @@ export const useAuthStore = create<AuthState>()(
         const token = get().token;
         if (token) {
           try {
-            const decoded: User = jwtDecode(token);
-            set({ user: decoded });
+            set({ token });
+            get().fetchUserData();
           } catch (error) {
             console.error("❌ Invalid token:", error);
             set({ user: null, token: null });

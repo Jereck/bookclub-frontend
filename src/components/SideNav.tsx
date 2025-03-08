@@ -6,18 +6,12 @@ import { Separator } from './ui/separator'
 import { Input } from './ui/input'
 import { ScrollArea } from './ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import { User, UserLibrary } from '../../types'
 import BookSearchModal from './BookSearchModal'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'next/navigation'
 
-interface SideNavProps {
-  library: UserLibrary[];
-  user?: User;
-}
-
-const SideNav = ({ user }: SideNavProps) => {
-  const { logout, library, fetchUserData } = useAuthStore()
+const SideNav = () => {
+  const { user, logout, library, fetchUserData } = useAuthStore()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
